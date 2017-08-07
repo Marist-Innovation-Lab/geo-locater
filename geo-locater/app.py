@@ -1,5 +1,4 @@
-
-#!../flask/bin/python
+#!../project/bin/python
 from flask import Flask
 
 app = Flask(__name__)

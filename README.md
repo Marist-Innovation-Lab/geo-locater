@@ -35,6 +35,7 @@ New python executable in project/bin/python
 Installing setuptools............................done.
 Installing pip...................done.
 ```
+note: you can create the virtualenv with whatever name you would like, but in doing so you must also change the shebang in the app.py file from #!../project/bin/python -> #!../<createdname>/bin/python
 
 ##### 2. Install dependencies inside the virtualenv:
 ```sh
@@ -44,7 +45,7 @@ $ project/bin/pip install -r requirements.txt
 ##### 3. Run the server!
 ```sh
 $ cd geo-locater
-$ python app.py
+$ ./app.py
 ```
 
 ##### 4. Test results
