@@ -19,7 +19,13 @@ geo-locator uses a number of open source projects to work properly:
 
 ### Installation
 
-geo-locator requires [flask], [virtualenv], and [geoIP] to work properly.
+geo-locator requires [flask], [virtualenv], and [geoIP] to work properly (all requirements should install if you follow the instructions below). To begin installation you must have Python 2.7.
+
+
+#### 0.5 Install virtualenv
+'''sh
+$ pip install virtualenv
+'''
 
 ##### 1. Create and initialize flask virtualenv for the project:
 
