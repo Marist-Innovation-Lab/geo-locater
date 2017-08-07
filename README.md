@@ -30,15 +30,15 @@ $ pip install virtualenv
 ##### 1. Create and initialize flask virtualenv for the project:
 ```sh
 $ cd geo-locater
-$ virtualenv flask
-New python executable in flask/bin/python
+$ virtualenv project
+New python executable in project/bin/python
 Installing setuptools............................done.
 Installing pip...................done.
 ```
 
 ##### 2. Install dependencies inside the virtualenv:
 ```sh
-$ flask/bin/pip install -r requirements.txt
+$ project/bin/pip install -r requirements.txt
 ```
 
 ##### 3. Run the server!
