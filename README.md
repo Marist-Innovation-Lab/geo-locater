@@ -23,9 +23,9 @@ geo-locator requires [flask], [virtualenv], and [geoIP] to work properly (all re
 
 
 ##### 0.5. Install virtualenv:
-'''sh
+```sh
 $ pip install virtualenv
-'''
+```
 
 ##### 1. Create and initialize flask virtualenv for the project:
 ```sh
