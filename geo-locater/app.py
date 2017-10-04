@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 from flask import Flask, jsonify
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 from locate import findloc
-from datetime import datetime
-
+import json, eventlet
 app = Flask(__name__)
 socketio = SocketIO(app)
+
+demo_on = 0;
 
 #define routes and methods used to navigate to said routes
 @app.route('/location/<srcip_address>-<destip_address>/', methods=['GET'])
@@ -27,6 +28,24 @@ def printver():
 @app.route('/datetime/', methods=['GET'])
 def printdatetime():
 	return str(datetime.now())
+
+@socketio.on('run_demo')
+def run_demo():
+	print("Demo Starting....")
+	demo_on = 1
+# read the json file 
+	with open("demo/ProdDemoFileAWSandAlbanySSHHP.json") as jsonfile:
+		data = json.load(jsonfile)
+		for i in range(1, 55):                                     #len(data)):
+			#read the data and assign variables
+			srcip_address = findloc(data[i]["SrcIP"])
+			destip_address = findloc(data[i]["DestIP"])
+			Timestamp = float(data[i-1]["Timestamp"])
+			FutureTS = float(data[i]["Timestamp"])
+			wait = FutureTS - Timestamp + .500
+			emit('send-to-map-withUserInfo', {'source-ip': srcip_address, 'dest-ip': destip_address, 'USERINFO' : {'username' : data[i]["User"], 'password' : data[i]["Pass"]}})
+			eventlet.sleep(wait)
+
 
 @app.route('/', methods=['GET'])
 def printhelp():

@@ -6,7 +6,7 @@ isp_mmdbdir  = "./dbs/GeoIP2-ISP.mmdb"
 
 def findloc(ip_address):
 	try:
-		print("Attempting to find location for: " + ip_address + "in the MaxMindDB. . .")
+		print("Attempting to find location for: " + ip_address + " in the MaxMindDB. . .")
 		reader    = geoip2.database.Reader(city_mmdbdir)
 		response  = reader.city(ip_address)
 		country   = response.country.name
