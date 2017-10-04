@@ -1,3 +1,5 @@
 flask
 geoip2
 flask-socketio
+evenlet
+greenlet
