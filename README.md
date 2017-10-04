@@ -14,32 +14,22 @@ geo-locator uses a number of open source projects to work properly:
 * [geoIP] - Provides the database reader needed to read the .mmdb binaries
 * [MaxMind] - Provides the .mmdb binaries
 * [flask] - a microframework for Python
+* [flask-socketio] - a websocket addon for Flask
+* [eventlet] - a python networking library
 * [python](https://www.python.org/download/releases/2.7/) - Python 2.6 or newer is required. Not tested on Python 3.
-* [virtualenv] - a highly reccomended python virtual environment builder [read more](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/)
 
 ### Installation
 
-geo-locator requires [flask], [virtualenv], and [geoIP] to work properly (all requirements should install if you follow the instructions below). To begin installation you must have Python 2.7.
+geo-locator requires [flask], [eventlet], [flask-socketio],and [geoIP] to work properly (all requirements should install if you follow the instructions below). To begin installation you must have Python 2.7.
 
-
-##### 0.5. Install virtualenv:
-```sh
-$ pip install virtualenv
-```
-
-##### 1. Create and initialize flask virtualenv for the project:
+##### 0.5 Navigate to the proper directory:
 ```sh
 $ cd geo-locater
-$ virtualenv project
-New python executable in project/bin/python
-Installing setuptools............................done.
-Installing pip...................done.
 ```
-note: you can create the virtualenv with whatever name you would like, but in doing so you must also change the shebang in the app.py file from #!../project/bin/python -> #!../<createdname>/bin/python
 
-##### 2. Install dependencies inside the virtualenv:
+##### 1. Install dependencies inside the virtualenv:
 ```sh
-$ project/bin/pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 ##### 3. Run the server!
@@ -59,9 +49,12 @@ Navigate to your front facing IP `http://<your-ip>:8080`
 
 License
 ----
+MIT
 This product includes GeoLite2 data created by MaxMind, available from [MaxMind].
 
    [maxmind]: <http://www.maxmind.com>
    [geoip]: <https://github.com/maxmind/GeoIP2-python>
    [flask]: <http://flask.pocoo.org/>
    [virtualenv]: <https://pypi.python.org/pypi/virtualenv>
+   [flask-socketio]: <https://flask-socketio.readthedocs.io/en/latest/>
+   [eventlet]: <http://eventlet.net/>
