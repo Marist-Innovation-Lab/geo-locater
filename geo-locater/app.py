@@ -1,12 +1,37 @@
 #!/usr/bin/env python
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
 from locate import findloc
-import json, eventlet
+from werkzeug import secure_filename
+import json, eventlet, os
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-demo_on = 0;
+app.config['UPLOAD_FOLDER'] = "/var/log/map/"
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
+
+	
+@app.route('/uploadAttack', methods = ['GET', 'POST'])
+def upload_file():
+   if request.method == 'POST':
+      f = request.files['file']
+      if f.filename.rsplit('.', 1)[1] != 'json':
+      	return 'ERROR. please upload a file with the .json file extension'
+      f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+      with open("/var/log/map/" + secure_filename(f.filename)) as jsonfile:
+		data = json.load(jsonfile)
+		for i in range (0, len(data)-1):    #len(data)):
+			#read the data and assign variables
+			srcip_address = findloc(data[i]["SrcIP"])
+			destip_address = findloc(data[i]["DestIP"])
+			Timestamp = float(data[i]["Timestamp"])
+			FutureTS = float(data[i+1]["Timestamp"])
+			wait = FutureTS - Timestamp + .500
+			socketio.emit('send-to-map-withUserInfo', {'source-ip': srcip_address, 'dest-ip': destip_address, 'USERINFO' : {'username' : data[i]["User"], 'password' : data[i]["Pass"]}})
+			eventlet.sleep(wait)
+      return 'file uploaded successfully'
+
+demo_on = 0
 
 #define routes and methods used to navigate to said routes
 @app.route('/location/<srcip_address>-<destip_address>/', methods=['GET'])
@@ -46,6 +71,27 @@ def run_demo():
 			emit('send-to-map-withUserInfo', {'source-ip': srcip_address, 'dest-ip': destip_address, 'USERINFO' : {'username' : data[i]["User"], 'password' : data[i]["Pass"]}})
 			eventlet.sleep(wait)
 
+@app.route('/custom_attack_info/', methods=['GET'])
+def printsamplejson():
+	return """<h1> Sample Custom Attack (JSON) </h1>
+	<p> You MUST use a JSON format that matches this.:
+	<br>
+	[{
+   "Timestamp": "<SECONDS FROM EPOCH>",
+   "SrcIP": "<SOURCE IP>",
+   "DestIP": "<DESTINATION IP>",
+   "Port": <PORTNUMBER>,
+   "User": "<USERNAME ATTEMPTED>",
+   "Pass": "<PASSWORD ATTEMPTED>"
+   },
+   {
+   "Timestamp": "<SECONDS FROM EPOCH>",
+   "SrcIP": "<SOURCE IP>",
+   "DestIP": "<DESTINATION IP>",
+   "Port": <PORTNUMBER>,
+   "User": "<USERNAME ATTEMPTED>",
+   "Pass": "<PASSWORD ATTEMPTED>"
+   }]"""
 
 @app.route('/', methods=['GET'])
 def printhelp():
@@ -59,7 +105,9 @@ def printhelp():
 #incase someone goes where we have nothing to show
 @app.errorhandler(404)
 def page_not_found(e):
-	return """<h1> 404 not found buddy. . . you can try again but next time do better.</h1>"""
+	return """<h1> 404 Resource Not Found </h1>
+                  <br>
+                  <p>Please make sure the URL is correct and try again. </p>"""
 
 if __name__ == '__main__':
 	socketio.run(app,host='0.0.0.0',port='8080')
