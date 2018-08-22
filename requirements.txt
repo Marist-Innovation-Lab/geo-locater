@@ -1,5 +1,5 @@
 flask
 geoip2
 flask-socketio
-evenlet
+eventlet==0.22.1
 greenlet
