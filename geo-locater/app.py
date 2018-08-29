@@ -19,16 +19,16 @@ def upload_file():
       	return 'ERROR. please upload a file with the .json file extension'
       f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
       with open("/var/log/map/" + secure_filename(f.filename)) as jsonfile:
-		data = json.load(jsonfile)
-		for i in range (0, len(data)-1):    #len(data)):
+        data = json.load(jsonfile)
+        for i in range (0, len(data)-1):    #len(data)):
 			#read the data and assign variables
-			srcip_address = findloc(data[i]["SrcIP"])
-			destip_address = findloc(data[i]["DestIP"])
-			Timestamp = float(data[i]["Timestamp"])
-			FutureTS = float(data[i+1]["Timestamp"])
-			wait = FutureTS - Timestamp + .500
-			socketio.emit('send-to-map-withUserInfo', {'source-ip': srcip_address, 'dest-ip': destip_address, 'USERINFO' : {'username' : data[i]["User"], 'password' : data[i]["Pass"]}})
-			eventlet.sleep(wait)
+            srcip_address = findloc(data[i]["SrcIP"])
+            destip_address = findloc(data[i]["DestIP"])
+            Timestamp = float(data[i]["Timestamp"])
+            FutureTS = float(data[i+1]["Timestamp"])
+            wait = FutureTS - Timestamp + .500
+            socketio.emit('send-to-map-withUserInfo', {'source-ip': srcip_address, 'dest-ip': destip_address, 'USERINFO' : {'username' : data[i]["User"], 'password' : data[i]["Pass"]}})
+            eventlet.sleep(wait)
       return 'file uploaded successfully'
 
 demo_on = 0
